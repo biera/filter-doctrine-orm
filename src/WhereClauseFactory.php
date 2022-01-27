@@ -28,6 +28,10 @@ class WhereClauseFactory
 
         switch ($filterExpression->type())
         {
+            case Operator::AND:
+            case Operator::OR:
+                return self::createFromFilterExpression($filterExpression, null);
+
             case Operator::LT:
             case Operator::LTE:
             case Operator::GT:
