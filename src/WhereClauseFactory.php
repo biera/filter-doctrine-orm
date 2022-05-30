@@ -51,7 +51,7 @@ class WhereClauseFactory
 
                 break;
 
-            case  Operator::LIKE:
+            case Operator::LIKE:
                 $buildExpression = fn() => $DQLExpression->like(
                     $filterExpression->identifier(),
                     $DQLExpression->literal(
@@ -61,8 +61,18 @@ class WhereClauseFactory
 
                 break;
 
-            case Operator::NULL:
-            case Operator::NOT_NULL:
+            case Operator::TRUE :
+                $buildExpression = fn () => $DQLExpression->eq(1, 1);
+
+                break;
+
+            case Operator::FALSE :
+                $buildExpression = fn () => $DQLExpression->eq(1, 2);
+
+                break;
+
+            case Operator::NULL :
+            case Operator::NOT_NULL :
                 $buildExpression = function () use ($filterExpression, $DQLExpression) {
                     $operator = ucfirst($filterExpression->type());
 
@@ -72,7 +82,8 @@ class WhereClauseFactory
                 break;
 
             case Operator::IN:
-                $buildExpression = fn() => $DQLExpression->in(
+            case Operator::NOT_IN:
+                $buildExpression = fn() => $DQLExpression->{$filterExpression->type()}(
                     $filterExpression->identifier(),
                     $filterExpression->literal()
                 );
